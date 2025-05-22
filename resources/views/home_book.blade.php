@@ -48,8 +48,8 @@
             <!-- TAMPILAN KHUSUS GURU DAN OSIS DI LAYOUT CONTAINER -->
             <div class="layout-container">
                 <!-- Bagian Guru -->
-                @if(!empty($teacherBooks) && $teacherBooks->count() > 0)
-                    @foreach($teacherBooks as $book)
+                @if(!empty($booksByCategory[1]['books']) && count($booksByCategory[1]['books']) > 0)
+                    @foreach($booksByCategory[1]['books'] as $book)
                         <div class="button-card">
                             <a href="{{ route('buku.detail', ['id' => $book->id, 'year' => $tahun]) }}" class="card-link">
                                 <div class="image-container">
@@ -62,11 +62,13 @@
                             </a>
                         </div>
                     @endforeach
+                @else
+                    <p>No books available for teachers.</p>
                 @endif
 
                 <!-- Bagian OSIS -->
-                @if(!empty($osisBooks) && $osisBooks->count() > 0)
-                    @foreach($osisBooks as $book)
+                @if(!empty($booksByCategory[2]['books']) && count($booksByCategory[2]['books']) > 0)
+                    @foreach($booksByCategory[2]['books'] as $book)
                         <div class="button-card-osis">
                             <a href="{{ route('buku.detail', ['id' => $book->id, 'year' => $tahun]) }}" class="card-link">
                                 <div class="image-container">
@@ -79,6 +81,8 @@
                             </a>
                         </div>
                     @endforeach
+                @else
+                    <p>No books available for OSIS.</p>
                 @endif
             </div>
         </section>
@@ -86,25 +90,27 @@
         <!-- TAMPILAN UNTUK SEMUA KATEGORI KECUALI GURU -->
         @if(!empty($booksByCategory))
             @foreach($booksByCategory as $categoryId => $category)
-                <section class="content-book">
-                    <p>{{ $category['name'] }}</p>
-                    <div class="buku-kelas">
-                        @foreach($category['books'] as $book)
-                            <div class="buku-kelas-card">
-                                <img src="{{ Storage::url($book->cover_path) }}"
-                                     alt="{{ $book->nama_kelas }}"
-                                     onerror="this.src='{{ asset('images/img/default-book.png') }}'">
+                @if($categoryId != 1 && $categoryId != 2)
+                    <section class="content-book">
+                        <h2>{{ $category['name'] }}</h2>
+                        <div class="buku-kelas">
+                            @foreach($category['books'] as $book)
+                                <div class="buku-kelas-card">
+                                    <img src="{{ Storage::url($book->cover_path) }}"
+                                         alt="{{ $book->nama_kelas }}"
+                                         onerror="this.src='{{ asset('images/img/default-book.png') }}'">
 
-                                <h1>{{ $book->nama_kelas }}</h1>
-                                <h2>Oleh {{ $book->penerbit ?? 'SMKN 1 Lumajang' }}</h2>
-                                <hr style="height:0.05em; border-width:0; background-color:black; margin-bottom:10px">
-                                <a href="{{ route('buku.detail', ['id' => $book->id, 'year' => $tahun]) }}">
-                                    <button>Lihat selengkapnya</button>
-                                </a>
-                            </div>
-                        @endforeach
-                    </div>
-                </section>
+                                    <h1>{{ $book->nama_kelas }}</h1>
+                                    <h2>Oleh {{ $book->penerbit ?? 'SMKN 1 Lumajang' }}</h2>
+                                    <hr style="height:0.05em; border-width:0; background-color:black; margin-bottom:10px">
+                                    <a href="{{ route('buku.detail', ['id' => $book->id, 'year' => $tahun]) }}">
+                                        <button>Lihat selengkapnya</button>
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                    </section>
+                @endif
             @endforeach
         @else
             <section class="content-book">
@@ -123,11 +129,11 @@
             <div class="footer-brand">
                 <h2 class="footer-title">BUKU TAHUNAN SISWA SMKN 1 LUMAJANG</h2>
                 <div class="footer-social">
-                    <a href="https://www.instagram.com/smkn1lumajang?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" aria-label="Instagram"><i class='bx bxl-instagram'></i></a>
+                    <a href="https://www.instagram.com/smkn1lumajang" aria-label="Instagram"><i class='bx bxl-instagram'></i></a>
                     <a href="https://web.facebook.com/people/SMKN-1-Lumajang/100071251050566/" aria-label="Facebook"><i class='bx bxl-facebook'></i></a>
-                    <a href="https://www.tiktok.com/@smkn1lumajang?_t=8knQnkBiAXB&_r=1" aria-label="Tiktok"><i class='bx bxl-tiktok'></i></a>
+                    <a href="https://www.tiktok.com/@smkn1lumajang" aria-label="Tiktok"><i class='bx bxl-tiktok'></i></a>
                     <a href="https://www.youtube.com/@smkn1lumajangtv797" aria-label="Youtube"><i class='bx bxl-youtube'></i></a>
-                    <a href="https://t.me/info_ppdb_smkn1lumajang_2024" aria-label="Spotify"><i class='bx bxl-telegram'></i></a>
+                    <a href="https://t.me/info_ppdb_smkn1lumajang_2024" aria-label="Telegram"><i class='bx bxl-telegram'></i></a>
                 </div>
             </div>
 
@@ -139,36 +145,32 @@
     </footer>
 
     <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const carousel = document.querySelector('.video-carousel');
-    const slides = document.querySelectorAll('.video-slide');
-    const prevBtn = document.querySelector('.carousel-prev');
-    const nextBtn = document.querySelector('.carousel-next');
-    let currentIndex = 0;
+        document.addEventListener('DOMContentLoaded', function() {
+            const carousel = document.querySelector('.video-carousel');
+            const slides = document.querySelectorAll('.video-slide');
+            const prevBtn = document.querySelector('.carousel-prev');
+            const nextBtn = document.querySelector('.carousel-next');
+            let currentIndex = 0;
 
-    function updateCarousel() {
-        slides.forEach((slide, index) => {
-            if (index === currentIndex) {
-                slide.classList.add('active');
-            } else {
-                slide.classList.remove('active');
+            function updateCarousel() {
+                slides.forEach((slide, index) => {
+                    slide.classList.toggle('active', index === currentIndex);
+                });
             }
+
+            prevBtn.addEventListener('click', function() {
+                currentIndex = (currentIndex > 0) ? currentIndex - 1 : slides.length - 1;
+                updateCarousel();
+            });
+
+            nextBtn.addEventListener('click', function() {
+                currentIndex = (currentIndex < slides.length - 1) ? currentIndex + 1 : 0;
+                updateCarousel();
+            });
+
+            // Initialize
+            updateCarousel();
         });
-    }
-
-    prevBtn.addEventListener('click', function() {
-        currentIndex = (currentIndex > 0) ? currentIndex - 1 : slides.length - 1;
-        updateCarousel();
-    });
-
-    nextBtn.addEventListener('click', function() {
-        currentIndex = (currentIndex < slides.length - 1) ? currentIndex + 1 : 0;
-        updateCarousel();
-    });
-
-    // Inisialisasi
-    updateCarousel();
-});
-</script>
+    </script>
 </body>
 </html>

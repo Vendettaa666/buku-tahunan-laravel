@@ -26,19 +26,21 @@ public function store(Request $request)
 {
     $validated = $request->validate([
         'tahun_id' => 'required|exists:tahuns,id',
-        'kategori_id' => 'required|exists:kategoris,id',
+        'kategori_id' => 'required|exists:kategoris,id', // Ensure this is validated
         'nama_kelas' => 'required|string|max:100',
         'penerbit' => 'required|string|max:100',
         'cover' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         'file' => 'required|file|mimes:pdf,doc,docx|max:10240',
     ]);
 
+    // Store the cover and file
     $coverPath = $request->file('cover')->store('covers', 'public');
     $filePath = $request->file('file')->store('buku_files', 'public');
 
+    // Create the book
     Buku::create([
         'tahun_id' => $validated['tahun_id'],
-        'kategori_id' => $validated['kategori_id'],
+        'kategori_id' => $validated['kategori_id'], // Ensure this is set
         'nama_kelas' => $validated['nama_kelas'],
         'penerbit' => $validated['penerbit'],
         'cover_path' => $coverPath,
@@ -48,6 +50,7 @@ public function store(Request $request)
     return redirect()->route('bukus.index')
         ->with('success', 'Buku tahunan berhasil ditambahkan!');
 }
+
     public function show(Buku $buku)
 {
     $buku->load('tahun', 'kategori'); // Memuat relasi tahun dan kategori

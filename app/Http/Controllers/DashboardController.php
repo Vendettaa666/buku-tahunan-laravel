@@ -15,7 +15,7 @@ class DashboardController extends Controller
     $totalBuku = Buku::count();
     $totalKategori = Kategori::count();
     $totalTahun = Tahun::count();
-    $latestBuku = Buku::with('tahun')->latest()->first();
+    $latestBuku = Buku::with('tahun', 'kategori')->latest()->first(); // Ensure category is loaded
 
     return view('admin/dashboard', compact(
         'tahuns',
@@ -25,4 +25,5 @@ class DashboardController extends Controller
         'latestBuku'
     ));
 }
+
 }
