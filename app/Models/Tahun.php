@@ -25,9 +25,17 @@ class Tahun extends Model
         return $this->hasMany(Buku::class);
     }
 
-    public function getCoverImageAttribute($value)
-{
-    if (!$value) return null;
-    return Storage::url('cover_years/' . $value);
-}
+    // Perbaikan accessor untuk cover image
+    public function getCoverImageUrlAttribute()
+    {
+        if (!$this->cover_image) return null;
+        return Storage::url('cover_years/' . $this->cover_image);
+    }
+
+    // Menghapus accessor lama yang konflik
+    // public function getCoverImageAttribute($value)
+    // {
+    //     if (!$value) return null;
+    //     return Storage::url('cover_years/' . $value);
+    // }
 }

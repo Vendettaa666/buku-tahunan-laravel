@@ -15,7 +15,7 @@ class TahunController extends Controller
         $tahuns = Tahun::withCount('bukus')->get();
         foreach ($tahuns as $tahun) {
             if ($tahun->cover_image) {
-                $tahun->cover_image_url = Storage::url('public/cover_years/' . $tahun->cover_image);
+                $tahun->cover_image_url = Storage::url('cover_years/' . $tahun->cover_image);
             }
         }
         return view('admin/tahuns.index', compact('tahuns'));
@@ -25,7 +25,7 @@ class TahunController extends Controller
     {
         $tahuns = Tahun::all()->map(function($tahun) {
             if ($tahun->cover_image) {
-                $tahun->cover_image_url = Storage::url('public/cover_years/' . $tahun->cover_image);
+                $tahun->cover_image_url = Storage::url('cover_years/' . $tahun->cover_image);
             }
             return $tahun;
         });
@@ -71,8 +71,18 @@ class TahunController extends Controller
 
     public function show($tahun)
     {
-        // Find the year record
-        $tahunRecord = Tahun::where('tahun', $tahun)->firstOrFail();
+        // Find the year record - perbaikan disini
+        $tahunRecord = Tahun::where('tahun', $tahun)->first();
+
+        // Jika tidak ditemukan, coba cari berdasarkan ID (fallback)
+        if (!$tahunRecord) {
+            $tahunRecord = Tahun::find($tahun);
+        }
+
+        // Jika masih tidak ditemukan, return 404
+        if (!$tahunRecord) {
+            abort(404, 'Tahun tidak ditemukan');
+        }
 
         // Get all categories
         $kategoris = Kategori::all();
@@ -100,6 +110,9 @@ class TahunController extends Controller
             }
         }
 
+        // Gunakan tahun dari record yang ditemukan
+        $tahun = $tahunRecord->tahun;
+
         return view('home_book', compact('tahunRecord', 'booksByCategory', 'teacherBooks', 'osisBooks', 'tahun'));
     }
 
@@ -107,7 +120,7 @@ class TahunController extends Controller
     {
         $kategoris = Kategori::all();
         if ($tahun->cover_image) {
-            $tahun->cover_image_url = Storage::url('public/cover_years/' . $tahun->cover_image);
+            $tahun->cover_image_url = Storage::url('cover_years/' . $tahun->cover_image);
         }
         return view('admin/tahuns.edit', compact('tahun', 'kategoris'));
     }

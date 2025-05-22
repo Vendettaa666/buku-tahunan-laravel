@@ -12,7 +12,7 @@
     <!-- HEADER -->
     <header class="header">
         <div class="header-content">
-            <a href="{{ url('/') }}">
+            <a href="{{ route('home') }}">
                 <img src="{{ asset('images/img/logosmk.png') }}" alt="Logo SMK">
                 <p class="header-title">Buku Tahunan Siswa - {{ $year }}</p>
             </a>
@@ -62,7 +62,7 @@
             </div>
         @endif
 
-        <a href="{{ route('years.show', $year) }}" class="back-btn">
+        <a href="{{ route('home_book', $year) }}" class="back-btn">
             <i class='bx bx-arrow-back'></i> Kembali ke Katalog {{ $year }}
         </a>
     </main>
@@ -88,4 +88,4 @@
         </div>
     </footer>
 </body>
-</html> 
+</html>

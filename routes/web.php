@@ -21,7 +21,9 @@ use App\Http\Controllers\FotoController;
 
 // Frontend Routes
 Route::get('/', [TahunController::class, 'frontIndex'])->name('home');
+Route::get('/index', [TahunController::class, 'frontIndex'])->name('tahuns.frontIndex');
 Route::get('/years/{tahun}', [TahunController::class, 'show'])->name('years.show');
+Route::get('/home_book/{tahun}', [TahunController::class, 'show'])->name('home_book');
 
 // Book detail and download routes
 Route::get('/buku/{id}/detail/{year}', [BukuController::class, 'detail'])->name('buku.detail');

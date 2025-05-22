@@ -11,7 +11,7 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <a href="{{ route('tahuns.frontIndex') }}">
+            <a href="{{ route('home') }}">
                 <img src="{{ asset('images/img/logosmk.png') }}" alt="Logo SMK">
                 <p class="header-title">Buku Tahunan Siswa - {{ $tahun }}</p>
             </a>
@@ -52,11 +52,13 @@
                     @foreach($teacherBooks as $book)
                         <div class="button-card">
                             <a href="{{ route('buku.detail', ['id' => $book->id, 'year' => $tahun]) }}" class="card-link">
-                                <img src="{{ Storage::url($book->cover_path) }}"
-                                     alt="{{ $book->nama_kelas }}"
-                                     class="card-image">
-
-                                <span class="card-overlay">{{ $book->nama_kelas }}</span>
+                                <div class="image-container">
+                                    <img src="{{ Storage::url($book->cover_path) }}"
+                                         alt="{{ $book->nama_kelas }}"
+                                         class="card-image"
+                                         onerror="this.src='{{ asset('images/img/default-book.png') }}'">
+                                </div>
+                                <div class="card-label">{{ $book->nama_kelas }}</div>
                             </a>
                         </div>
                     @endforeach
@@ -67,11 +69,13 @@
                     @foreach($osisBooks as $book)
                         <div class="button-card-osis">
                             <a href="{{ route('buku.detail', ['id' => $book->id, 'year' => $tahun]) }}" class="card-link">
-                                <img src="{{ Storage::url($book->cover_path) }}"
-                                     alt="{{ $book->nama_kelas }}"
-                                     class="card-image">
-
-                                <span class="card-overlay">{{ $book->nama_kelas }}</span>
+                                <div class="image-container">
+                                    <img src="{{ Storage::url($book->cover_path) }}"
+                                         alt="{{ $book->nama_kelas }}"
+                                         class="card-image"
+                                         onerror="this.src='{{ asset('images/img/default-book.png') }}'">
+                                </div>
+                                <div class="card-label">{{ $book->nama_kelas }}</div>
                             </a>
                         </div>
                     @endforeach
@@ -88,7 +92,8 @@
                         @foreach($category['books'] as $book)
                             <div class="buku-kelas-card">
                                 <img src="{{ Storage::url($book->cover_path) }}"
-                                     alt="{{ $book->nama_kelas }}">
+                                     alt="{{ $book->nama_kelas }}"
+                                     onerror="this.src='{{ asset('images/img/default-book.png') }}'">
 
                                 <h1>{{ $book->nama_kelas }}</h1>
                                 <h2>Oleh {{ $book->penerbit ?? 'SMKN 1 Lumajang' }}</h2>
@@ -103,7 +108,12 @@
             @endforeach
         @else
             <section class="content-book">
-                <p>Tidak ada data buku tersedia</p>
+                <p>Tidak ada data buku tersedia untuk tahun {{ $tahun }}</p>
+                <div style="text-align: center; margin: 20px;">
+                    <a href="{{ route('home') }}" style="color: #007bff; text-decoration: none;">
+                        ← Kembali ke halaman utama
+                    </a>
+                </div>
             </section>
         @endif
     </main>

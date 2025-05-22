@@ -23,16 +23,17 @@
                     <div class="card_image">
                         <a href="{{ route('home_book', $tahun->tahun) }}">
                             @if($tahun->cover_image)
-                                <img src="{{ Storage::url($tahun->cover_image) }}" alt="Buku Tahunan {{ $tahun->tahun }}">
+                                <img src="{{ Storage::url('cover_years/' . $tahun->cover_image) }}" alt="Buku Tahunan {{ $tahun->tahun }}">
                             @else
-                                {{-- <img src="{{ asset('images/img/covertahun' . $tahun->tahun . '.png') }}" alt="Buku Tahunan {{ $tahun->tahun }}"> --}}
+                                <!-- Fallback image jika tidak ada cover_image -->
+                                <img src="{{ asset('images/img/covertahun' . $tahun->tahun . '.png') }}" alt="Buku Tahunan {{ $tahun->tahun }}" onerror="this.src='{{ asset('images/img/default-cover.png') }}'">
                             @endif
                         </a>
                     </div>
                 </div>
             @endforeach
 
-            {{-- Fallback cards if no data from database --}}
+            <!-- Fallback cards if no data from database -->
             @if($tahuns->isEmpty())
                 <div class="card swiper-slide">
                     <div class="card_image">
@@ -41,7 +42,13 @@
                         </a>
                     </div>
                 </div>
-
+                <div class="card swiper-slide">
+                    <div class="card_image">
+                        <a href="{{ route('home_book', '2025') }}">
+                            <img src="{{ asset('images/img/covertahun2025.png') }}" alt="Buku Tahunan 2025">
+                        </a>
+                    </div>
+                </div>
             @endif
         </div>
     </section>
