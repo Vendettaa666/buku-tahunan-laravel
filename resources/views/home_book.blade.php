@@ -54,8 +54,8 @@
                             <a href="{{ route('buku.detail', ['id' => $book->id, 'year' => $tahun]) }}" class="card-link">
                                 <img src="{{ Storage::url($book->cover_path) }}"
                                      alt="{{ $book->nama_kelas }}"
-                                     class="card-image"
-                                     onerror="this.src='{{ asset('images/img/buttonimage.png') }}'">
+                                     class="card-image">
+
                                 <span class="card-overlay">{{ $book->nama_kelas }}</span>
                             </a>
                         </div>
@@ -69,8 +69,8 @@
                             <a href="{{ route('buku.detail', ['id' => $book->id, 'year' => $tahun]) }}" class="card-link">
                                 <img src="{{ Storage::url($book->cover_path) }}"
                                      alt="{{ $book->nama_kelas }}"
-                                     class="card-image"
-                                     onerror="this.src='{{ asset('images/img/osis-buttoncard.png') }}'">
+                                     class="card-image">
+
                                 <span class="card-overlay">{{ $book->nama_kelas }}</span>
                             </a>
                         </div>
@@ -88,8 +88,8 @@
                         @foreach($category['books'] as $book)
                             <div class="buku-kelas-card">
                                 <img src="{{ Storage::url($book->cover_path) }}"
-                                     alt="{{ $book->nama_kelas }}"
-                                     onerror="this.src='{{ asset('images/img/osis55.png') }}'">
+                                     alt="{{ $book->nama_kelas }}">
+
                                 <h1>{{ $book->nama_kelas }}</h1>
                                 <h2>Oleh {{ $book->penerbit ?? 'SMKN 1 Lumajang' }}</h2>
                                 <hr style="height:0.05em; border-width:0; background-color:black; margin-bottom:10px">
