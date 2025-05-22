@@ -35,8 +35,14 @@
                             </tr>
                         </table>
                     </div>
+                    <div class="col-md-6">
+                        @if($tahun->cover_image)
+                                <img src="{{ $tahun->cover_image }}" alt="Cover" class="img-cover" style="max-width: 400px;">
+                            @else
+                                <span class="text-muted">No Image</span>
+                            @endif
+                    </div>
                 </div>
-
                 <hr>
 
                 <h5 class="mt-4">Daftar Buku Tahun Ini</h5>
@@ -103,6 +109,10 @@
 @push('styles')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 <style>
+    .img-cover {
+        max-height: 200px;
+        object-fit: cover;
+    }
     .img-thumbnail {
         max-height: 50px;
         object-fit: cover;

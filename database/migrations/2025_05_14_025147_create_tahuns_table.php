@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tahuns', function (Blueprint $table) {
     $table->id();
     $table->string('tahun')->unique();
+    $table->string('cover_image')->nullable();
     $table->timestamps();
 });
     }

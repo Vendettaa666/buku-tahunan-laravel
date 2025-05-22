@@ -25,6 +25,7 @@
                 <thead class="table-dark">
                     <tr>
                         <th>No</th>
+                        <th>Cover</th>
                         <th>Tahun</th>
                         <th>Jumlah Buku</th>
                         <th>Aksi</th>
@@ -34,6 +35,13 @@
                     @forelse($tahuns as $key => $tahun)
                     <tr>
                         <td>{{ $key + 1 }}</td>
+                        <td>
+                            @if($tahun->cover_image)
+                                <img src="{{ $tahun->cover_image }}" alt="Cover" class="img-thumbnail" style="max-width: 100px;">
+                            @else
+                                <span class="text-muted">No Image</span>
+                            @endif
+                        </td>
                         <td>{{ $tahun->tahun }}</td>
                         <td>{{ $tahun->bukus_count ?? $tahun->bukus->count() }}</td>
                         <td>
@@ -54,7 +62,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="4" class="text-center">Tidak ada data tahun</td>
+                        <td colspan="5" class="text-center">Tidak ada data tahun</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -69,6 +77,10 @@
 <style>
     .table th, .table td {
         vertical-align: middle;
+    }
+    .img-thumbnail {
+        max-height: 200px;
+        object-fit: cover;
     }
 </style>
 @endpush

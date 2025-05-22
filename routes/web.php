@@ -20,7 +20,8 @@ use App\Http\Controllers\FotoController;
 |
 */
 
-Route::view('/', 'welcome');
+Route::view('/', 'index');
+Route::get('/years/{tahun}', [TahunController::class, 'show'])->name('years.show');
 
 Route::get('dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])

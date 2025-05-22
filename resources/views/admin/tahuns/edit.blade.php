@@ -8,7 +8,7 @@
                 <h4 class="card-title">Edit Tahun</h4>
             </div>
             <div class="card-body">
-                <form action="{{ route('tahuns.update', $tahun->id) }}" method="POST">
+                <form action="{{ route('tahuns.update', $tahun->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="mb-3">
@@ -16,6 +16,19 @@
                         <input type="text" class="form-control @error('tahun') is-invalid @enderror"
                                id="tahun" name="tahun" value="{{ old('tahun', $tahun->tahun) }}" required>
                         @error('tahun')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="cover_image" class="form-label">Cover Image</label>
+                        @if($tahun->cover_image)
+                            <div class="mb-2">
+                                <img src="{{ asset('storage/' . $tahun->cover_image) }}" alt="Current Cover" class="img-thumbnail" style="max-height: 200px">
+                            </div>
+                        @endif
+                        <input type="file" class="form-control @error('cover_image') is-invalid @enderror"
+                               id="cover_image" name="cover_image" accept="image/*">
+                        @error('cover_image')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
