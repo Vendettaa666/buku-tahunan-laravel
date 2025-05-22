@@ -8,7 +8,6 @@ use App\Http\Controllers\TahunController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\FotoController;
 
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,9 +19,15 @@ use App\Http\Controllers\FotoController;
 |
 */
 
-Route::view('/', 'index');
+// Frontend Routes
+Route::get('/', [TahunController::class, 'frontIndex'])->name('home');
 Route::get('/years/{tahun}', [TahunController::class, 'show'])->name('years.show');
 
+// Book detail and download routes
+Route::get('/buku/{id}/detail/{year}', [BukuController::class, 'detail'])->name('buku.detail');
+Route::get('/buku/{id}/download/{year}', [BukuController::class, 'download'])->name('buku.download');
+
+// Admin Dashboard Routes
 Route::get('dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -31,10 +36,8 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
-
+// Protected Admin Routes
 Route::middleware(['auth'])->group(function () {
-    // ... rute lainnya
-
     // Tahun Routes
     Route::resource('tahuns', TahunController::class);
 
@@ -44,8 +47,12 @@ Route::middleware(['auth'])->group(function () {
     // Foto Routes
     Route::resource('fotos', FotoController::class);
 
+    // Kategori Routes
     Route::resource('kategoris', KategoriController::class);
+
+    // Logout Route
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-    ->name('logout');
+        ->name('logout');
 });
+
 require __DIR__ . '/auth.php';

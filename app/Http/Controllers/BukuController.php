@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tahun; // Pastikan ini sudah ada
-use App\Models\Kategori; // Tambahkan baris ini
+use App\Models\Tahun;
+use App\Models\Kategori;
 use App\Models\Buku;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
@@ -53,6 +53,48 @@ public function store(Request $request)
     $buku->load('tahun', 'kategori'); // Memuat relasi tahun dan kategori
     return view('admin/bukus.show', compact('buku'));
 }
+
+    // Method untuk menampilkan detail buku di frontend
+    public function detail($id, $year)
+    {
+        // Find the year record
+        $tahunRecord = Tahun::where('tahun', $year)->firstOrFail();
+
+        // Find the book
+        $buku = Buku::with(['tahun', 'kategori'])
+            ->where('id', $id)
+            ->where('tahun_id', $tahunRecord->id)
+            ->firstOrFail();
+
+        // Check if this is a teacher book
+        $isTeacherBook = ($buku->kategori_id == 2);
+
+        return view('detail_book', compact('buku', 'year', 'isTeacherBook'));
+    }
+
+    // Method untuk download file
+    public function download($id, $year)
+    {
+        // Find the year record
+        $tahunRecord = Tahun::where('tahun', $year)->firstOrFail();
+
+        // Find the book
+        $buku = Buku::where('id', $id)
+            ->where('tahun_id', $tahunRecord->id)
+            ->firstOrFail();
+
+        if (!$buku->file_path) {
+            abort(404, 'File tidak ditemukan');
+        }
+
+        $filePath = storage_path('app/public/' . $buku->file_path);
+
+        if (!file_exists($filePath)) {
+            abort(404, 'File tidak ditemukan');
+        }
+
+        return response()->download($filePath, basename($buku->file_path));
+    }
 
     public function edit(Buku $buku)
 {

@@ -14,50 +14,37 @@
     <header>
         <p>Buku</p>
         <span>Tahunan Siswa</span>
-
     </header>
 
-        <section class="swiper mySwiper">
-            <div class="swiper-wrapper">
-
+    <section class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            @foreach($tahuns as $tahun)
                 <div class="card swiper-slide">
                     <div class="card_image">
-                        <a href="{{ url('home_book') }}">
-                            <img src="{{ asset('images/img/covertahun2024.png') }}" alt="">
-                        </a>
-
-                    </div>
-                </div>
-
-                <div class="card swiper-slide">
-                    <div class="card_image">
-                        <a href="{{ url('years/2025') }}">
-                            <img src="{{ asset('assets/img/dua_lima.jpg') }}" alt="">
+                        <a href="{{ route('home_book', $tahun->tahun) }}">
+                            @if($tahun->cover_image)
+                                <img src="{{ Storage::url($tahun->cover_image) }}" alt="Buku Tahunan {{ $tahun->tahun }}">
+                            @else
+                                {{-- <img src="{{ asset('images/img/covertahun' . $tahun->tahun . '.png') }}" alt="Buku Tahunan {{ $tahun->tahun }}"> --}}
+                            @endif
                         </a>
                     </div>
                 </div>
+            @endforeach
 
+            {{-- Fallback cards if no data from database --}}
+            @if($tahuns->isEmpty())
                 <div class="card swiper-slide">
                     <div class="card_image">
-                        <img src="{{ asset('assets/img/dua_enam.jpg') }}" alt="">
+                        <a href="{{ route('home_book', '2024') }}">
+                            <img src="{{ asset('images/img/covertahun2024.png') }}" alt="Buku Tahunan 2024">
+                        </a>
                     </div>
                 </div>
 
-                <div class="card swiper-slide">
-                    <div class="card_image">
-                        <img src="{{ asset('assets/img/dua_tujuh.jpg') }}" alt="">
-                    </div>
-                </div>
-
-                <div class="card swiper-slide">
-                    <div class="card_image">
-                        <img src="{{ asset('assets/img/dua_delapan.jpg') }}" alt="">
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
+            @endif
+        </div>
+    </section>
 
     <footer class="footer">
         <div class="footer-container">
@@ -72,11 +59,11 @@
             </div>
         </div>
     </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
     <script>
         // Detect Safari
         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
         const isFirefox = /firefox/i.test(navigator.userAgent);
 
         if (isSafari || isFirefox) {
@@ -120,7 +107,6 @@
                 pagination: {
                     el: ".swiper-pagination",
                 },
-
             });
         }
     </script>

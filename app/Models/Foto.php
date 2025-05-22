@@ -10,9 +10,14 @@ class Foto extends Model
     use HasFactory;
 
     protected $fillable = [
-    'buku_id',
-    'judul',
-    'foto_path',
-    'deskripsi'
-];
+        'buku_id',
+        'judul',
+        'foto_path',
+        'deskripsi'
+    ];
+
+    public function buku()
+    {
+        return $this->belongsTo(Buku::class);
+    }
 }

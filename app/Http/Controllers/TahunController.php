@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tahun;
 use App\Models\Kategori;
+use App\Models\Buku;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,7 +21,7 @@ class TahunController extends Controller
         return view('admin/tahuns.index', compact('tahuns'));
     }
 
-        public function frontIndex()
+    public function frontIndex()
     {
         $tahuns = Tahun::all()->map(function($tahun) {
             if ($tahun->cover_image) {
@@ -68,23 +69,38 @@ class TahunController extends Controller
         }
     }
 
-    public function show(Tahun $tahun)
+    public function show($tahun)
     {
-        $tahun->load(['bukus' => function($query) {
-            $query->with('kategori');
-        }]);
+        // Find the year record
+        $tahunRecord = Tahun::where('tahun', $tahun)->firstOrFail();
 
-        if ($tahun->cover_image) {
-            $tahun->cover_image_url = Storage::url('public/cover_years/' . $tahun->cover_image);
-        }
+        // Get all categories
+        $kategoris = Kategori::all();
 
-        foreach ($tahun->bukus as $buku) {
-            if ($buku->cover_image) {
-                $buku->cover_image_url = Storage::url('public/cover_books/' . $buku->cover_image);
+        // Get books by category for this year
+        $booksByCategory = [];
+        $teacherBooks = [];
+        $osisBooks = [];
+
+        foreach ($kategoris as $kategori) {
+            $books = Buku::with('kategori')
+                ->where('tahun_id', $tahunRecord->id)
+                ->where('kategori_id', $kategori->id)
+                ->get();
+
+            if ($kategori->id == 2) { // Teacher books (kategori_id = 2)
+                $teacherBooks = $books;
+            } elseif ($kategori->id == 5) { // OSIS books (assuming kategori_id = 5)
+                $osisBooks = $books;
+            } elseif ($books->count() > 0) {
+                $booksByCategory[$kategori->id] = [
+                    'name' => $kategori->nama,
+                    'books' => $books
+                ];
             }
         }
 
-        return view('admin/tahuns.show', compact('tahun'));
+        return view('home_book', compact('tahunRecord', 'booksByCategory', 'teacherBooks', 'osisBooks', 'tahun'));
     }
 
     public function edit(Tahun $tahun)
@@ -138,4 +154,3 @@ class TahunController extends Controller
             ->with('success', 'Tahun berhasil dihapus');
     }
 }
-
