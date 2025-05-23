@@ -26,7 +26,7 @@ public function store(Request $request)
 {
     $validated = $request->validate([
         'tahun_id' => 'required|exists:tahuns,id',
-        'kategori_id' => 'required|exists:kategoris,id', // Ensure this is validated
+        'kategori_id' => 'nullable|exists:kategoris,id',
         'nama_kelas' => 'required|string|max:100',
         'penerbit' => 'required|string|max:100',
         'cover' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -40,7 +40,7 @@ public function store(Request $request)
     // Create the book
     Buku::create([
         'tahun_id' => $validated['tahun_id'],
-        'kategori_id' => $validated['kategori_id'], // Ensure this is set
+        'kategori_id' => $validated['kategori_id'],
         'nama_kelas' => $validated['nama_kelas'],
         'penerbit' => $validated['penerbit'],
         'cover_path' => $coverPath,
@@ -108,20 +108,25 @@ public function store(Request $request)
 
     public function update(Request $request, Buku $buku)
 {
-    $request->validate([
+    $validated = $request->validate([
         'tahun_id' => 'required|exists:tahuns,id',
-        'kategori_id' => 'required|exists:kategoris,id',
+        'kategori_id' => 'nullable|exists:kategoris,id',
         'nama_kelas' => 'required|string|max:100',
         'penerbit' => 'required|string|max:100',
         'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
     ]);
 
-    $data = $request->only(['tahun_id', 'kategori_id', 'nama_kelas', 'penerbit']);
+    $data = [
+        'tahun_id' => $validated['tahun_id'],
+        'kategori_id' => $validated['kategori_id'],
+        'nama_kelas' => $validated['nama_kelas'],
+        'penerbit' => $validated['penerbit'],
+    ];
 
     if ($request->hasFile('cover')) {
-        // Hapus cover lama jika ada
+        // Delete old cover if exists
         if ($buku->cover_path) {
-            Storage::disk('public')->delete($buku->cover_path);
+            Storage::delete('public/' . $buku->cover_path);
         }
         $data['cover_path'] = $request->file('cover')->store('covers', 'public');
     } elseif ($request->has('remove_cover')) {
@@ -134,7 +139,7 @@ public function store(Request $request)
 
     $buku->update($data);
 
-    return redirect()->route('bukus.show', $buku->id)
+    return redirect()->route('bukus.index')
         ->with('success', 'Buku berhasil diperbarui');
 }
 

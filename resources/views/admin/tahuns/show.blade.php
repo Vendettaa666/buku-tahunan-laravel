@@ -37,7 +37,7 @@
                     </div>
                     <div class="col-md-6">
                         @if($tahun->cover_image)
-                                <img src="{{ $tahun->cover_image }}" alt="Cover" class="img-cover" style="max-width: 400px;">
+                                <img src="{{ $tahun->cover_image_url }}" alt="Cover" class="img-cover" style="max-width: 400px;">
                             @else
                                 <span class="text-muted">No Image</span>
                             @endif

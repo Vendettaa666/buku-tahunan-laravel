@@ -23,7 +23,7 @@
                         <label for="cover_image" class="form-label">Cover Image</label>
                         @if($tahun->cover_image)
                             <div class="mb-2">
-                                <img src="{{ asset('storage/' . $tahun->cover_image) }}" alt="Current Cover" class="img-thumbnail" style="max-height: 200px">
+                                <img src="{{ $tahun->cover_image_url }}" alt="Current Cover" class="img-thumbnail" style="max-height: 200px">
                             </div>
                         @endif
                         <input type="file" class="form-control @error('cover_image') is-invalid @enderror"

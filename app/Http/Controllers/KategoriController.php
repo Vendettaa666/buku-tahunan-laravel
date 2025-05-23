@@ -51,9 +51,13 @@ class KategoriController extends Controller
 
     public function destroy(Kategori $kategori)
     {
+        // Update all books in this category to have no category
+        $kategori->bukus()->update(['kategori_id' => null]);
+
+        // Now delete the category
         $kategori->delete();
 
         return redirect()->route('kategoris.index')
-            ->with('success', 'Kategori berhasil dihapus');
+            ->with('success', 'Kategori berhasil dihapus dan buku-buku terkait telah diupdate');
     }
 }

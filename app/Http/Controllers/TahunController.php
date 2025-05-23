@@ -12,24 +12,15 @@ class TahunController extends Controller
 {
     public function index()
     {
-        $tahuns = Tahun::withCount('bukus')->get();
-        foreach ($tahuns as $tahun) {
-            if ($tahun->cover_image) {
-                $tahun->cover_image_url = Storage::url('cover_years/' . $tahun->cover_image);
-            }
-        }
+        $tahuns = Tahun::withCount('bukus')
+            ->orderBy('tahun', 'asc')
+            ->get();
         return view('admin/tahuns.index', compact('tahuns'));
     }
 
     public function frontIndex()
     {
-        $tahuns = Tahun::all()->map(function($tahun) {
-            if ($tahun->cover_image) {
-                $tahun->cover_image_url = Storage::url('cover_years/' . $tahun->cover_image);
-            }
-            return $tahun;
-        });
-
+        $tahuns = Tahun::orderBy('tahun', 'asc')->get();
         return view('index', compact('tahuns'));
     }
 
@@ -71,7 +62,7 @@ class TahunController extends Controller
 
     public function show($tahun)
     {
-        // Find the year record - perbaikan disini
+        // Find the year record
         $tahunRecord = Tahun::where('tahun', $tahun)->first();
 
         // Jika tidak ditemukan, coba cari berdasarkan ID (fallback)
@@ -84,44 +75,48 @@ class TahunController extends Controller
             abort(404, 'Tahun tidak ditemukan');
         }
 
-        // Get all categories
-        $kategoris = Kategori::all();
+        // Get all books for this year with their categories
+        $books = Buku::with('kategori')
+            ->where('tahun_id', $tahunRecord->id)
+            ->get();
 
-        // Get books by category for this year
+        // Initialize booksByCategory array
         $booksByCategory = [];
-        $teacherBooks = [];
-        $osisBooks = [];
 
-        foreach ($kategoris as $kategori) {
-            $books = Buku::with('kategori')
-                ->where('tahun_id', $tahunRecord->id)
-                ->where('kategori_id', $kategori->id)
-                ->get();
+        // Group books by category
+        foreach ($books as $book) {
+            $categoryId = $book->kategori_id;
+            $categoryName = $book->kategori->nama;
 
-            if ($kategori->id == 2) { // Teacher books (kategori_id = 2)
-                $teacherBooks = $books;
-            } elseif ($kategori->id == 5) { // OSIS books (assuming kategori_id = 5)
-                $osisBooks = $books;
-            } elseif ($books->count() > 0) {
-                $booksByCategory[$kategori->id] = [
-                    'name' => $kategori->nama,
-                    'books' => $books
+            if (!isset($booksByCategory[$categoryId])) {
+                $booksByCategory[$categoryId] = [
+                    'name' => $categoryName,
+                    'books' => []
                 ];
             }
+
+            $booksByCategory[$categoryId]['books'][] = $book;
         }
 
-        // Gunakan tahun dari record yang ditemukan
-        $tahun = $tahunRecord->tahun;
+        // Check if the request is coming from admin section
+        if (request()->is('tahuns/*')) {
+            return view('admin/tahuns.show', [
+                'tahun' => $tahunRecord,
+                'booksByCategory' => $booksByCategory
+            ]);
+        }
 
-        return view('home_book', compact('tahunRecord', 'booksByCategory', 'teacherBooks', 'osisBooks', 'tahun'));
+        // For frontend
+        return view('home_book', [
+            'tahunRecord' => $tahunRecord,
+            'booksByCategory' => $booksByCategory,
+            'tahun' => $tahunRecord->tahun
+        ]);
     }
 
     public function edit(Tahun $tahun)
     {
         $kategoris = Kategori::all();
-        if ($tahun->cover_image) {
-            $tahun->cover_image_url = Storage::url('cover_years/' . $tahun->cover_image);
-        }
         return view('admin/tahuns.edit', compact('tahun', 'kategoris'));
     }
 
@@ -129,13 +124,11 @@ class TahunController extends Controller
     {
         $request->validate([
             'tahun' => 'required|unique:tahuns,tahun,'.$tahun->id,
-            'kategori_id' => 'nullable|exists:kategoris,id',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         $data = [
             'tahun' => $request->tahun,
-            'kategori_id' => $request->kategori_id
         ];
 
         if ($request->hasFile('cover_image')) {

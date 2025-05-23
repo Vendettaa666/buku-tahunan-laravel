@@ -47,8 +47,8 @@
 
             <!-- TAMPILAN KHUSUS GURU DAN OSIS DI LAYOUT CONTAINER -->
             <div class="layout-container">
-                <!-- Bagian Guru -->
-                @if(!empty($booksByCategory[1]['books']) && count($booksByCategory[1]['books']) > 0)
+                <!-- Bagian Guru (Kategori 1) -->
+                @if(!empty($booksByCategory[1]) && count($booksByCategory[1]['books']) > 0)
                     @foreach($booksByCategory[1]['books'] as $book)
                         <div class="button-card">
                             <a href="{{ route('buku.detail', ['id' => $book->id, 'year' => $tahun]) }}" class="card-link">
@@ -62,12 +62,10 @@
                             </a>
                         </div>
                     @endforeach
-                @else
-                    <p>No books available for teachers.</p>
                 @endif
 
-                <!-- Bagian OSIS -->
-                @if(!empty($booksByCategory[2]['books']) && count($booksByCategory[2]['books']) > 0)
+                <!-- Bagian OSIS (Kategori 2) -->
+                @if(!empty($booksByCategory[2]) && count($booksByCategory[2]['books']) > 0)
                     @foreach($booksByCategory[2]['books'] as $book)
                         <div class="button-card-osis">
                             <a href="{{ route('buku.detail', ['id' => $book->id, 'year' => $tahun]) }}" class="card-link">
@@ -81,13 +79,11 @@
                             </a>
                         </div>
                     @endforeach
-                @else
-                    <p>No books available for OSIS.</p>
                 @endif
             </div>
         </section>
 
-        <!-- TAMPILAN UNTUK SEMUA KATEGORI KECUALI GURU -->
+        <!-- TAMPILAN UNTUK SEMUA KATEGORI KECUALI GURU DAN OSIS -->
         @if(!empty($booksByCategory))
             @foreach($booksByCategory as $categoryId => $category)
                 @if($categoryId != 1 && $categoryId != 2)

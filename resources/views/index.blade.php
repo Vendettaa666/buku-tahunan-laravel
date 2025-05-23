@@ -8,6 +8,42 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="icon" href="{{ asset('images/img/logosmk.png') }}" type="image/x-icon">
     <title>Buku Tahunan Siswa </title>
+    <style>
+        .highlight-card {
+            position: relative;
+            transform: scale(1.1);
+            z-index: 2;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .highlight-card::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 2px solid gold;
+            border-radius: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -19,7 +55,7 @@
     <section class="swiper mySwiper">
         <div class="swiper-wrapper">
             @foreach($tahuns as $tahun)
-                <div class="card swiper-slide">
+                <div class="card swiper-slide {{ $tahun->tahun == '2025' ? 'highlight-card' : '' }}">
                     <div class="card_image">
                         <a href="{{ route('home_book', $tahun->tahun) }}">
                             @if($tahun->cover_image)
@@ -42,7 +78,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="card swiper-slide">
+                <div class="card swiper-slide highlight-card">
                     <div class="card_image">
                         <a href="{{ route('home_book', '2025') }}">
                             <img src="{{ asset('images/img/covertahun2025.png') }}" alt="Buku Tahunan 2025">
@@ -114,7 +150,20 @@
                 pagination: {
                     el: ".swiper-pagination",
                 },
+                initialSlide: getInitialSlide(),
             });
+        }
+
+        // Function to find the index of 2025 card
+        function getInitialSlide() {
+            const slides = document.querySelectorAll('.swiper-slide');
+            let index = 0;
+            slides.forEach((slide, i) => {
+                if (slide.classList.contains('highlight-card')) {
+                    index = i;
+                }
+            });
+            return index;
         }
     </script>
 </body>

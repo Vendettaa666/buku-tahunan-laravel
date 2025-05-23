@@ -37,7 +37,7 @@
                         <td>{{ $key + 1 }}</td>
                         <td>
                             @if($tahun->cover_image)
-                                <img src="{{ $tahun->cover_image }}" alt="Cover" class="img-thumbnail" style="max-width: 100px;">
+                                <img src="{{ $tahun->cover_image_url }}" alt="Cover" class="img-thumbnail" style="max-width: 100px;">
                             @else
                                 <span class="text-muted">No Image</span>
                             @endif

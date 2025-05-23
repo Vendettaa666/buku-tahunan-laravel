@@ -15,6 +15,8 @@ class Tahun extends Model
         'cover_image'
     ];
 
+    protected $appends = ['cover_image_url'];
+
     public function kategori()
     {
         return $this->belongsTo(Kategori::class);
@@ -25,11 +27,12 @@ class Tahun extends Model
         return $this->hasMany(Buku::class);
     }
 
-    // Perbaikan accessor untuk cover image
     public function getCoverImageUrlAttribute()
     {
-        if (!$this->cover_image) return null;
-        return Storage::url('cover_years/' . $this->cover_image);
+        if (!$this->cover_image) {
+            return null;
+        }
+        return asset('storage/cover_years/' . $this->cover_image);
     }
 
     // Menghapus accessor lama yang konflik

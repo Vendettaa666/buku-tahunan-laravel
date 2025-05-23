@@ -50,8 +50,8 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="kategori_id" class="form-label">Kategori</label>
-                                <select class="form-select @error('kategori_id') is-invalid @enderror" id="kategori_id" name="kategori_id" required>
-                                    <option value="">Pilih Kategori</option>
+                                <select class="form-select @error('kategori_id') is-invalid @enderror" id="kategori_id" name="kategori_id">
+                                    <option value="">Tidak Ada Kategori</option>
                                     @foreach($kategoris as $kategori)
                                         <option value="{{ $kategori->id }}" {{ old('kategori_id', $buku->kategori_id) == $kategori->id ? 'selected' : '' }}>
                                             {{ $kategori->nama }}

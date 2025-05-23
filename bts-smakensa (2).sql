@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 21, 2025 at 08:16 AM
+-- Generation Time: May 23, 2025 at 02:06 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -44,10 +44,11 @@ CREATE TABLE `bukus` (
 --
 
 INSERT INTO `bukus` (`id`, `tahun_id`, `kategori_id`, `nama_kelas`, `penerbit`, `cover_path`, `file_path`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 'REKAYASA PERANGKAT LUNAK', 'SMKN 1 LUMAJANG', 'covers/btKacyatM9Uys5vwRLonmQlWAuxbhvky13tC8XKk.png', 'buku_files/UMKIkzsyuW3K6SB4knlV0RbAnpRp1156f4ybZL85.pdf', '2025-05-13 21:19:08', '2025-05-13 21:19:08'),
-(2, 1, 1, 'KOMITE SMK', 'SMKN 1 LUMAJANG', 'covers/nlz14VIzMVZc1htmIbOgqCoYlyqBy58HcpCs4Qox.png', 'buku_files/KsrX712J4wGXy93rWdWOHWgWs9HIlSiPX55M0nQX.pdf', '2025-05-14 17:41:29', '2025-05-14 17:41:29'),
-(4, 1, 4, 'gen 55', 'SMKN 1 LUMAJANG', 'covers/blY91ywHieFVd1Jjk9VBc4uZfMTGwabFXVIz77DE.png', 'buku_files/8b5cpYPv5oyELnrN7TMOBARhC2s2WMgLnC1SUzwt.pdf', '2025-05-20 19:06:01', '2025-05-20 19:06:01'),
-(5, 2, 1, 'REKAYASA PERANGKAT LUNAK', 'SMKN 1 LUMAJANG', 'covers/xd0weZiZNZtjmsFJi4kngCZZP72LasJLQxBZwTnC.png', 'buku_files/4WqBWWOhYKzUklc4z1kUD4zaQX8MvXhKtf9HM5CL.pdf', '2025-05-20 20:11:20', '2025-05-20 20:11:20');
+(3, 2, 3, 'REKAYASA PERANGKAT LUNAK', 'SMKN 1 LUMAJANG', 'covers/gB4LMe4Cdjze9YWlSSVN3ay2kFFmEZvYPcfKFwgD.png', 'buku_files/Du3LvqNygSoWTSwaMAwJBEEyv0ihJOS82GZBtGEh.pdf', '2025-05-22 05:03:08', '2025-05-22 12:55:23'),
+(4, 2, 1, 'KOMITE SMK', 'SMKN 1 LUMAJANG', 'covers/Faj6h34SjiCctWDzUB0ODL8x8L0cRjm3VgGymy8E.png', 'buku_files/sseM5a259CAwBUfhGDHMcn3RwKqTkvYkeyfgfhOT.pdf', '2025-05-22 05:08:53', '2025-05-22 12:55:48'),
+(5, 2, 2, 'gen 54', 'SMKN 1 LUMAJANG', 'covers/OIzArKNi8QwSTXy4WY95LGU4IuswdmGrgbdnVYcc.png', 'buku_files/3wwi7RqGsIkHTJ198K3RT68iaaKNWWgWAVLqUdA4.pdf', '2025-05-22 05:09:49', '2025-05-22 12:55:32'),
+(6, 2, 3, 'REKAYASA PERANGKAT LUNAK', 'Nama Sekolah', 'covers/QRiI5YAu8SjXKBJjGnMfIIP82zmF4zVtOyaqQTz7.png', 'buku_files/ZCgJQkylhewYZHaHIYCXNoUjPol49rP2lPGLXkkR.pdf', '2025-05-22 12:32:30', '2025-05-22 12:32:30'),
+(7, 2, 4, 'BAND', 'Nama Sekolah', 'covers/Tp4wtirp5xHmjg1zcxjT2Q5BgR7wQKUMas78DKCp.png', 'buku_files/3KNCCaR958nEftNlbxGSiZX4Fg72gs0j0W3KLrXf.pdf', '2025-05-22 16:56:21', '2025-05-22 16:56:21');
 
 -- --------------------------------------------------------
 
@@ -100,11 +101,11 @@ CREATE TABLE `kategoris` (
 --
 
 INSERT INTO `kategoris` (`id`, `nama`, `deskripsi`, `created_at`, `updated_at`) VALUES
-(1, 'Guru', 'untuk guru', '2025-05-13 20:43:04', '2025-05-14 17:47:00'),
-(2, 'Osis', 'Untuk buku osis', '2025-05-14 17:46:51', '2025-05-14 17:46:51'),
-(3, 'Kelas', 'Untuk Buku Perkelas', '2025-05-14 17:47:28', '2025-05-14 17:47:28'),
-(4, 'Ekstrakurikuler', 'Buku untuk seluruh Ekstrakurikuler', '2025-05-14 17:48:13', '2025-05-14 17:48:13'),
-(5, 'Lain Lain', 'Untuk buku Dokumentasi Kegiatan', '2025-05-14 17:48:45', '2025-05-14 17:48:45');
+(1, 'Guru', '-', '2025-05-22 00:24:37', '2025-05-22 12:55:08'),
+(2, 'Osis', '-', '2025-05-22 00:58:32', '2025-05-22 12:55:01'),
+(3, 'Siswa-siswi', 'osis', '2025-05-22 04:59:36', '2025-05-22 12:46:43'),
+(4, 'Ekstrakurikuler', 'Untuk Ekstrakurikuler', '2025-05-22 05:01:09', '2025-05-22 05:01:09'),
+(5, 'Lain Lain', 'untuk dokumentasi kegiatan lainnya', '2025-05-22 05:02:11', '2025-05-22 05:02:11');
 
 -- --------------------------------------------------------
 
@@ -172,6 +173,7 @@ CREATE TABLE `personal_access_tokens` (
 CREATE TABLE `tahuns` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `tahun` varchar(255) NOT NULL,
+  `cover_image` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -180,9 +182,10 @@ CREATE TABLE `tahuns` (
 -- Dumping data for table `tahuns`
 --
 
-INSERT INTO `tahuns` (`id`, `tahun`, `created_at`, `updated_at`) VALUES
-(1, '2024', '2025-05-13 19:59:37', '2025-05-13 19:59:37'),
-(2, '2025', '2025-05-20 20:10:07', '2025-05-20 20:10:07');
+INSERT INTO `tahuns` (`id`, `tahun`, `cover_image`, `created_at`, `updated_at`) VALUES
+(2, '2024', '1747898199_Blue Bold Happy New Year 2022 Celebration Instagram Story  (1).png', '2025-05-22 00:16:40', '2025-05-22 00:16:40'),
+(3, '2025', '1747900952_Blue Bold Happy New Year 2022 Celebration Instagram Story .png', '2025-05-22 01:02:32', '2025-05-22 01:02:32'),
+(4, '2026', '1747912567_Blue Bold Happy New Year 2022 Celebration Instagram Story .png', '2025-05-22 04:16:07', '2025-05-22 04:16:07');
 
 -- --------------------------------------------------------
 
@@ -200,6 +203,13 @@ CREATE TABLE `users` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'admin', 'admin@example.com', NULL, '$2y$10$x/NVQdywQDc5OMt8wp6g3O1930K4ONgsXXwSpvRwardQ0OjCbUWXO', NULL, '2025-05-21 23:52:54', '2025-05-21 23:52:54');
 
 --
 -- Indexes for dumped tables
@@ -276,7 +286,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `bukus`
 --
 ALTER TABLE `bukus`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -294,7 +304,7 @@ ALTER TABLE `fotos`
 -- AUTO_INCREMENT for table `kategoris`
 --
 ALTER TABLE `kategoris`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -312,13 +322,13 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `tahuns`
 --
 ALTER TABLE `tahuns`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
