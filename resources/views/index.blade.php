@@ -13,7 +13,7 @@
             position: relative;
             transform: scale(1.1);
             z-index: 2;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             transition: all 0.3s ease;
         }
 
@@ -24,7 +24,7 @@
             left: -5px;
             right: -5px;
             bottom: -5px;
-            border: 2px solid gold;
+            border: 2px solid rgb(0, 0, 0);
             border-radius: 10px;
             animation: pulse 2s infinite;
         }
