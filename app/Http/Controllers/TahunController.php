@@ -85,9 +85,18 @@ class TahunController extends Controller
 
         // Group books by category
         foreach ($books as $book) {
-            $categoryId = $book->kategori_id;
-            $categoryName = $book->kategori->nama;
+            $categoryId = $book->kategori_id ?? 0; // Default to 0 if no category
 
+            // Handle case when category_id is null
+            if ($categoryId === null) {
+                $categoryId = 0;
+                $categoryName = 'Tidak Berkategori';
+            } else {
+                // Jika kategori ada, gunakan nama kategori tersebut
+                $categoryName = $book->kategori ? $book->kategori->nama : 'Tidak Berkategori';
+            }
+
+            // Jika kategori belum ada di array, tambahkan
             if (!isset($booksByCategory[$categoryId])) {
                 $booksByCategory[$categoryId] = [
                     'name' => $categoryName,
@@ -95,8 +104,14 @@ class TahunController extends Controller
                 ];
             }
 
+            // Tambahkan buku ke kategori yang sesuai
             $booksByCategory[$categoryId]['books'][] = $book;
         }
+
+        // Debugging: Log the booksByCategory array to see its structure
+        \Illuminate\Support\Facades\Log::debug('Books By Category:', [
+            'booksByCategory' => $booksByCategory
+        ]);
 
         // Check if the request is coming from admin section
         if (request()->is('tahuns/*')) {

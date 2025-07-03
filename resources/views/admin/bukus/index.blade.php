@@ -2,10 +2,10 @@
 
 @section('content')
 <div class="row mb-4">
-    <div class="col-md-6">
-        <h2>Daftar Buku Tahunan</h2>
+    <div class="col-md-6 col-sm-12 mb-2">
+        <h2 class="fs-3">Daftar Buku Tahunan</h2>
     </div>
-    <div class="col-md-6 text-end">
+    <div class="col-md-6 col-sm-12 text-md-end text-center mb-2">
         <a href="{{ route('bukus.create') }}" class="btn btn-primary">
             <i class="bi bi-plus-circle"></i> Tambah Buku
         </a>
@@ -24,12 +24,12 @@
             <table class="table table-striped table-hover">
                 <thead class="table-dark">
                     <tr>
-                        <th>No</th>
-                        <th>Cover</th>
+                        <th width="50">No</th>
+                        <th width="80">Cover</th>
                         <th>Nama Kelas</th>
-                        <th>Tahun</th>
-                        <th>Kategori</th>
-                        <th>Aksi</th>
+                        <th width="100">Tahun</th>
+                        <th width="120">Kategori</th>
+                        <th width="150">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,7 +38,7 @@
                         <td>{{ $key + 1 }}</td>
                         <td>
                             @if($buku->cover_path)
-                                <img src="{{ asset('storage/' . $buku->cover_path) }}" alt="Cover Buku" width="60" class="img-thumbnail">
+                                <img src="{{ asset('storage/' . $buku->cover_path) }}" alt="Cover Buku" class="img-thumbnail">
                             @else
                                 <span class="text-muted">Tidak ada cover</span>
                             @endif
@@ -53,7 +53,7 @@
                             @endif
                         </td>
                         <td>
-                            <div class="btn-group" role="group">
+                            <div class="d-flex flex-wrap gap-1 justify-content-center">
                                 <a href="{{ route('bukus.show', $buku->id) }}" class="btn btn-sm btn-info" title="Lihat">
                                     <i class="bi bi-eye"></i>
                                 </a>
@@ -91,13 +91,46 @@
     .table th, .table td {
         vertical-align: middle;
     }
+
     .img-thumbnail {
         max-height: 60px;
+        max-width: 60px;
         object-fit: cover;
     }
-    .btn-group {
-        display: flex;
-        gap: 5px;
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+        .table th, .table td {
+            font-size: 0.9rem;
+            padding: 0.5rem;
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.4rem;
+            font-size: 0.75rem;
+        }
+
+        .img-thumbnail {
+            max-height: 50px;
+            max-width: 50px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .table th, .table td {
+            font-size: 0.8rem;
+            padding: 0.4rem;
+        }
+
+        .btn-sm {
+            padding: 0.2rem 0.3rem;
+            font-size: 0.7rem;
+        }
+
+        .img-thumbnail {
+            max-height: 40px;
+            max-width: 40px;
+        }
     }
 </style>
 @endpush

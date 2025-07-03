@@ -16,9 +16,9 @@
                 <p class="header-title">Buku Tahunan Siswa - {{ $tahun }}</p>
             </a>
         </div>
-        <a href="{{ route('login') }}">
+        {{-- <a href="{{ route('login') }}">
             <button class="download-button">Download</button>
-        </a>
+        </a> --}}
     </header>
 
     <main>
@@ -83,10 +83,61 @@
             </div>
         </section>
 
-        <!-- TAMPILAN UNTUK SEMUA KATEGORI KECUALI GURU DAN OSIS -->
+        <!-- TAMPILAN KHUSUS UNTUK KATEGORI SISWA -->
+        @php
+            // Definisi kategori yang akan ditampilkan di bagian atas
+            $priorityCategories = [];
+
+            // Cari kategori "Siswa" atau "Siswi" berdasarkan nama
+            foreach($booksByCategory as $catId => $cat) {
+                $name = strtolower($cat['name']);
+                if (str_contains($name, 'siswa') || str_contains($name, 'siswi')) {
+                    $priorityCategories[$catId] = $cat;
+                }
+            }
+
+            // Debug: Tampilkan semua kategori yang tersedia
+            if(config('app.debug')) {
+                echo "<!-- Available Categories: ";
+                foreach($booksByCategory as $catId => $cat) {
+                    echo $catId . ":" . $cat['name'] . ", ";
+                }
+                echo " -->";
+            }
+        @endphp
+
+        <!-- Tampilkan kategori siswa/siswi terlebih dahulu -->
+        @foreach($priorityCategories as $categoryId => $category)
+            <section class="content-book">
+                <h2>{{ $category['name'] }}</h2>
+                <div class="buku-kelas">
+                    @foreach($category['books'] as $book)
+                        <div class="buku-kelas-card">
+                            <img src="{{ Storage::url($book->cover_path) }}"
+                                 alt="{{ $book->nama_kelas }}"
+                                 onerror="this.src='{{ asset('images/img/default-book.png') }}'">
+
+                            <h1>{{ $book->nama_kelas }}</h1>
+                            <h2>Oleh {{ $book->penerbit ?? 'SMKN 1 Lumajang' }}</h2>
+                            <hr style="height:0.05em; border-width:0; background-color:black; margin-bottom:10px">
+                            <a href="{{ route('buku.detail', ['id' => $book->id, 'year' => $tahun]) }}">
+                                <button>Lihat selengkapnya</button>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            </section>
+        @endforeach
+
+        <!-- TAMPILAN UNTUK SEMUA KATEGORI KECUALI GURU, OSIS, DAN SISWA/SISWI -->
         @if(!empty($booksByCategory))
+            @php
+                // Kategori yang sudah ditampilkan khusus
+                $excludedCategories = array_merge([1, 2], array_keys($priorityCategories), [0]);
+            @endphp
+
             @foreach($booksByCategory as $categoryId => $category)
-                @if($categoryId != 1 && $categoryId != 2)
+                @if(!in_array($categoryId, $excludedCategories))
                     <section class="content-book">
                         <h2>{{ $category['name'] }}</h2>
                         <div class="buku-kelas">
@@ -108,6 +159,29 @@
                     </section>
                 @endif
             @endforeach
+
+            <!-- TAMPILAN UNTUK BUKU TANPA KATEGORI -->
+            @if(!empty($booksByCategory[0]) && count($booksByCategory[0]['books']) > 0)
+                <section class="content-book">
+                    <h2>{{ $booksByCategory[0]['name'] }}</h2>
+                    <div class="buku-kelas">
+                        @foreach($booksByCategory[0]['books'] as $book)
+                            <div class="buku-kelas-card">
+                                <img src="{{ Storage::url($book->cover_path) }}"
+                                     alt="{{ $book->nama_kelas }}"
+                                     onerror="this.src='{{ asset('images/img/default-book.png') }}'">
+
+                                <h1>{{ $book->nama_kelas }}</h1>
+                                <h2>Oleh {{ $book->penerbit ?? 'SMKN 1 Lumajang' }}</h2>
+                                <hr style="height:0.05em; border-width:0; background-color:black; margin-bottom:10px">
+                                <a href="{{ route('buku.detail', ['id' => $book->id, 'year' => $tahun]) }}">
+                                    <button>Lihat selengkapnya</button>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                </section>
+            @endif
         @else
             <section class="content-book">
                 <p>Tidak ada data buku tersedia untuk tahun {{ $tahun }}</p>

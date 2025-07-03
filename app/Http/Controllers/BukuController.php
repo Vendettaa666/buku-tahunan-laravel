@@ -29,22 +29,42 @@ public function store(Request $request)
         'kategori_id' => 'nullable|exists:kategoris,id',
         'nama_kelas' => 'required|string|max:100',
         'penerbit' => 'required|string|max:100',
-        'cover' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'cover' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120|dimensions:max_width=2000,max_height=3000',
         'file' => 'required|file|mimes:pdf,doc,docx|max:10240',
+    ], [
+        'cover.max' => 'Ukuran file cover tidak boleh lebih dari 5MB.',
+        'cover.dimensions' => 'Dimensi gambar cover terlalu besar. Maksimal 2000x3000 piksel.',
+        'cover.mimes' => 'Format file cover harus berupa jpeg, png, jpg, atau gif.',
+        'file.max' => 'Ukuran file buku tidak boleh lebih dari 10MB.',
+    ]);
+
+    // Debug log: periksa nilai kategori_id dari request
+    \Illuminate\Support\Facades\Log::debug('Store Request Data:', [
+        'kategori_id' => $request->kategori_id,
+        'validated_kategori_id' => $validated['kategori_id'] ?? 'null',
     ]);
 
     // Store the cover and file
     $coverPath = $request->file('cover')->store('covers', 'public');
     $filePath = $request->file('file')->store('buku_files', 'public');
 
+    // Handle empty kategori_id (convert empty string to null)
+    $kategoriId = !empty($validated['kategori_id']) ? $validated['kategori_id'] : null;
+
     // Create the book
-    Buku::create([
+    $buku = Buku::create([
         'tahun_id' => $validated['tahun_id'],
-        'kategori_id' => $validated['kategori_id'],
+        'kategori_id' => $kategoriId,
         'nama_kelas' => $validated['nama_kelas'],
         'penerbit' => $validated['penerbit'],
         'cover_path' => $coverPath,
         'file_path' => $filePath,
+    ]);
+
+    // Debug log: periksa data buku setelah disimpan
+    \Illuminate\Support\Facades\Log::debug('Buku Created:', [
+        'id' => $buku->id,
+        'kategori_id' => $buku->kategori_id,
     ]);
 
     return redirect()->route('bukus.index')
@@ -113,12 +133,25 @@ public function store(Request $request)
         'kategori_id' => 'nullable|exists:kategoris,id',
         'nama_kelas' => 'required|string|max:100',
         'penerbit' => 'required|string|max:100',
-        'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120|dimensions:max_width=2000,max_height=3000',
+    ], [
+        'cover.max' => 'Ukuran file cover tidak boleh lebih dari 5MB.',
+        'cover.dimensions' => 'Dimensi gambar cover terlalu besar. Maksimal 2000x3000 piksel.',
+        'cover.mimes' => 'Format file cover harus berupa jpeg, png, jpg, atau gif.',
     ]);
+
+    // Debug log: periksa nilai kategori_id dari request
+    \Illuminate\Support\Facades\Log::debug('Update Request Data:', [
+        'kategori_id' => $request->kategori_id,
+        'validated_kategori_id' => $validated['kategori_id'] ?? 'null',
+    ]);
+
+    // Handle empty kategori_id (convert empty string to null)
+    $kategoriId = !empty($validated['kategori_id']) ? $validated['kategori_id'] : null;
 
     $data = [
         'tahun_id' => $validated['tahun_id'],
-        'kategori_id' => $validated['kategori_id'],
+        'kategori_id' => $kategoriId,
         'nama_kelas' => $validated['nama_kelas'],
         'penerbit' => $validated['penerbit'],
     ];
@@ -138,6 +171,12 @@ public function store(Request $request)
     }
 
     $buku->update($data);
+
+    // Debug log: periksa data buku setelah diupdate
+    \Illuminate\Support\Facades\Log::debug('Buku Updated:', [
+        'id' => $buku->id,
+        'kategori_id' => $buku->kategori_id,
+    ]);
 
     return redirect()->route('bukus.index')
         ->with('success', 'Buku berhasil diperbarui');
